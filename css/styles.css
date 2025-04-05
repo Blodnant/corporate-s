@@ -3226,6 +3226,7 @@ img.u-pull-left {
     letter-spacing : .2em;
     color          : white;
     margin-top     : 0;
+    margin-bottom     : var(--vspace-2_5);
 }
 
 .s-intro__title {
@@ -3248,7 +3249,7 @@ img.u-pull-left {
 .s-intro__more-btn {
     border : 2px solid white;
     color  : white;
-    margin : 0;
+    margin : ;
 }
 
 .s-intro__more-btn:focus,
@@ -3424,7 +3425,8 @@ img.u-pull-left {
  *
  * ------------------------------------------------------------------- */
 .s-about {
-    --text-desc-size  : 5.2rem;
+    /*--text-desc-size  : 5.2rem;*/
+    --text-desc-size  : 3.5rem;
     --text-multiplier : 1;
 
     background-color  : white;
@@ -3804,7 +3806,7 @@ img.u-pull-left {
 }
 
 .folio-item:hover .folio-item__thumb a::before {
-    opacity    : 1;
+    opacity    : 0.3;
     visibility : visible;
 }
 
@@ -4038,7 +4040,7 @@ img.u-pull-left {
  * ------------------------------------------------------------------- */
 .s-contact__infos {
     margin-top  : var(--vspace-1);
-    font-family : var(--font-2);
+    font-family : var(--font-1);
     font-weight : 400;
     font-size   : calc(var(--text-size) * 1.556);
     line-height : var(--vspace-1_5);
@@ -4053,6 +4055,7 @@ img.u-pull-left {
 .s-contact__list {
     list-style  : none;
     margin-left : 0;
+    font-family : var(--font-1);
 }
 
 .s-contact__list a {
