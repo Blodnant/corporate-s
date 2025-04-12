@@ -2199,6 +2199,14 @@ button.btn--pill {
     border-radius : 1000px !important;
 }
 
+.btn--constrained {
+    width: fit-content;
+    max-width: 360px; /* or whatever you like */
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+
 
 /* ===================================================================
  * # TABLE
@@ -3227,7 +3235,7 @@ img.u-pull-left {
     letter-spacing : .2em;
     color          : white;
     margin-top     : 0;
-    margin-bottom     : var(--vspace-2_5);
+    margin-bottom     : var(--vspace-1);
 }
 
 .s-intro__title {
@@ -3460,6 +3468,10 @@ img.u-pull-left {
     color : var(--color-2);
 }
 
+.s-about__lists {
+    text-align : left;
+}
+
 /* ------------------------------------------------------------------- 
  * responsive:
  * about
@@ -3588,9 +3600,14 @@ img.u-pull-left {
     color         : white;
 }
 
+.service-content {
+    text-align: left;
+}
+
 .service-icon-block {
     display       : block;
     margin-bottom : var(--vspace-0_25);
+    text-align: left;
 }
 
 .service-icon-block svg {
@@ -3908,6 +3925,8 @@ img.u-pull-left {
     padding-top      : var(--vspace-1_25);
     padding-bottom   : var(--vspace-1_25);
     background-color : var(--color-gray-4);
+    text-align: center
+    max-width         : 960px;
 }
 
 .clients {
@@ -3993,7 +4012,7 @@ img.u-pull-left {
     --color-border      : rgba(255, 255, 255, .05);
 
     background-color    : var(--color-gray-19);
-    background-image    : url(../images/contact-bg.jpg);
+    /*background-image    : url(../images/contact-bg.jpg); */
     background-repeat   : no-repeat;
     background-position : center;
     background-size     : cover;
