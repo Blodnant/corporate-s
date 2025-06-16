@@ -165,20 +165,20 @@
                         <form id="contact-form" >
                             <div>
                                 <label for="name">Your name<span class="required">*</span></label>
-                                <input class="u-fullwidth" type="text" placeholder="Please enter your name" id="name" required>
+                                <input class="u-fullwidth" type="text" placeholder="Please enter your name" name="name" id="name" required>
                             </div>
                             <div>
                                 <label for="email">Your email<span class="required">*</span></label>
-                                <input class="u-fullwidth" type="email" placeholder="test@mailbox.com" id="email" required>
+                                <input class="u-fullwidth" type="email" placeholder="test@mailbox.com" name="email" id="email" required>
                             </div>
                             <div>
                                 <label for="phone">Your mobile number<span class="required">*</span></label>
-                                <input class="u-fullwidth" type="tel" placeholder="07712345678" id="phone" required>
+                                <input class="u-fullwidth" type="tel" placeholder="07712345678" name="phone" id="phone" required>
                             </div>
                             <div>
                                 <label for="category">Reason for contacting<span class="required">*</span></label>
                                 <div class="ss-custom-select">
-                                    <select class="u-fullwidth" id="category" required>
+                                    <select class="u-fullwidth" name="category" id="category" required>
                                         <option value="" disabled selected hidden>Please select a reason</option>
                                         <option value="Private booking request">Private booking request</option>
                                         <option value="Block booking request">Block booking request</option>
@@ -189,7 +189,7 @@
                             </div>
 
                             <label for="message">Message<span class="required">*</span></label>
-                            <textarea class="u-fullwidth" placeholder="Your message - please include specific dates if applicable" id="message" required></textarea>
+                            <textarea class="u-fullwidth" placeholder="Your message - please include specific dates if applicable" name="message" id="message" required></textarea>
 
 
                             <input class="btn--primary u-fullwidth" type="submit" value="Submit">
