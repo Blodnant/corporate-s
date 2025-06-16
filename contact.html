@@ -159,7 +159,7 @@
 
                     <div class="column lg-12 tab-12">
 
-                        <form>
+                        <form id="contact-form" >
                             <div>
                                 <label for="nameInput">Your name<span class="required">*</span></label>
                                 <input class="u-fullwidth" type="text" placeholder="Please enter your name" id="nameInput" required>
@@ -359,7 +359,53 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 </script>
+<!-- JavaScript for custom form validation -->
+    <script>
+      // Initialize EmailJS (replace with your own user/public key)
+      (function () {
+        emailjs.init("3dhQj6zCsnuH8_Egz");
+      })();
 
+      // Custom validation function
+      document.getElementById("contact-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        var form = this;
+        var isValid = true;
+        // Remove previous error messages
+        form.querySelectorAll(".error").forEach(function (err) {
+          err.remove();
+        });
+        // Get all required input and textarea elements
+        var fields = form.querySelectorAll("input[required], textarea[required]");
+        fields.forEach(function (field) {
+          // Clear any previous error border
+          field.classList.remove("error-border");
+          if (!field.value.trim()) {
+            isValid = false;
+            var errorMessage = document.createElement("div");
+            errorMessage.className = "error";
+            errorMessage.innerText = "This field is required.";
+            field.classList.add("error-border");
+            // Insert the error message after the field
+            field.parentNode.appendChild(errorMessage);
+          }
+        });
+
+        // If the form is not valid, stop here so user can fix errors
+        if (!isValid) {
+          return;
+        }
+
+        // If valid, send the form using EmailJS
+        emailjs.sendForm("service_k5atvgn", "template_qpgmwbc", form)
+          .then(function () {
+            alert("Message sent successfully!");
+            form.reset();
+          }, function (error) {
+            alert("Failed to send message: " + JSON.stringify(error));
+          });
+      });
+    </script>
 
 
 </body>
