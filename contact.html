@@ -31,6 +31,8 @@
 
 </head>
 
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 
 <body id="top">
 
@@ -191,6 +193,15 @@
                             <label for="message">Message<span class="required">*</span></label>
                             <textarea class="u-fullwidth" placeholder="Your message - please include specific dates if applicable" name="message" id="message" required></textarea>
 
+<div style="position:absolute; left:-9999px; height:0; overflow:hidden;">
+  <label for="company">Company</label>
+  <input type="text" name="company" id="company" tabindex="-1" autocomplete="off">
+</div>
+<!-- Invisible reCAPTCHA widget -->
+<div class="g-recaptcha"
+     data-sitekey="6LeL_E8sAAAAAPjATj3X4OSyyTx21Ksf3SLTDX7h"
+     data-callback="onRecaptchaSuccess"
+     data-size="invisible"></div>
 
                             <input class="btn--primary u-fullwidth" type="submit" value="Submit">
                         </form>
@@ -358,54 +369,98 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 </script>
-<!-- JavaScript for custom form validation -->
-    <script>
-      // Initialize EmailJS (replace with your own user/public key)
-      (function () {
-        emailjs.init("3dhQj6zCsnuH8_Egz");
-      })();
+<script>
+  /* ================================
+     EmailJS + Anti-spam hardening
+     ================================ */
 
-      // Custom validation function
-      document.getElementById("contact-form").addEventListener("submit", function (event) {
-        event.preventDefault();
-        var form = this;
-        var isValid = true;
-        // Remove previous error messages
-        form.querySelectorAll(".error").forEach(function (err) {
-          err.remove();
-        });
-        // Get all required input and textarea elements
-        var fields = form.querySelectorAll("input[required], textarea[required]");
-        fields.forEach(function (field) {
-          // Clear any previous error border
-          field.classList.remove("error-border");
-          if (!field.value.trim()) {
-            isValid = false;
-            var errorMessage = document.createElement("div");
-            errorMessage.className = "error";
-            errorMessage.innerText = "This field is required.";
-            field.classList.add("error-border");
-            // Insert the error message after the field
-            field.parentNode.appendChild(errorMessage);
-          }
-        });
+  (function () {
+    emailjs.init("3dhQj6zCsnuH8_Egz");
+  })();
 
-        // If the form is not valid, stop here so user can fix errors
-        if (!isValid) {
-          return;
-        }
+  // Timestamp used for TOO-FAST SUBMIT CHECK
+  const formLoadedAt = Date.now();
 
-        // If valid, send the form using EmailJS
-        emailjs.sendForm("service_k5atvgn", "template_qpgmwbc", form)
-          .then(function () {
-            alert("Message sent successfully!");
-            form.reset();
-          }, function (error) {
-            alert("Failed to send message: " + JSON.stringify(error));
-          });
+  // Store form while reCAPTCHA runs
+  window.__pendingEmailForm = null;
+
+  document.getElementById("contact-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    var form = this;
+
+    /* ----------------------------
+       BOT HONEYPOT CHECK
+       ---------------------------- */
+    if (form.company && form.company.value.trim() !== "") {
+      return; // silently drop bot submission
+    }
+
+    /* ----------------------------
+       TOO-FAST SUBMIT CHECK
+       ---------------------------- */
+    if (Date.now() - formLoadedAt < 4000) {
+      return; // bots submit instantly, humans do not
+    }
+
+    /* ----------------------------
+       CLIENT-SIDE VALIDATION
+       ---------------------------- */
+    var isValid = true;
+
+    // Remove previous errors
+    form.querySelectorAll(".error").forEach(err => err.remove());
+
+    var fields = form.querySelectorAll(
+      "input[required], textarea[required], select[required]"
+    );
+
+    fields.forEach(function (field) {
+      field.classList.remove("error-border");
+
+      if (!field.value.trim()) {
+        isValid = false;
+        var errorMessage = document.createElement("div");
+        errorMessage.className = "error";
+        errorMessage.innerText = "This field is required.";
+        field.classList.add("error-border");
+        field.parentNode.appendChild(errorMessage);
+      }
+    });
+
+    if (!isValid) return;
+
+    /* ----------------------------
+       TRIGGER INVISIBLE reCAPTCHA
+       ---------------------------- */
+    window.__pendingEmailForm = form;
+    grecaptcha.execute(); // calls onRecaptchaSuccess(token)
+  });
+
+  /* ----------------------------
+     reCAPTCHA CALLBACK
+     ---------------------------- */
+  function onRecaptchaSuccess(token) {
+    var form = window.__pendingEmailForm;
+    if (!form) return;
+
+    emailjs.sendForm("service_k5atvgn", "template_qpgmwbc", form)
+      .then(function () {
+        alert("Message sent successfully!");
+        form.reset();
+        grecaptcha.reset();
+      })
+      .catch(function (error) {
+        alert("Failed to send message: " + JSON.stringify(error));
+        grecaptcha.reset();
+      })
+      .finally(function () {
+        window.__pendingEmailForm = null;
       });
-    </script>
+  }
 
+  // Required because data-callback references a global function
+  window.onRecaptchaSuccess = onRecaptchaSuccess;
+</script>
 
 </body>
 </html>
